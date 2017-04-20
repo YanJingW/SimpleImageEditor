@@ -1,0 +1,38 @@
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="materialcolorpicker__white">#ffffff</color>
+    <color name="materialcolorpicker__red">#f44336</color>
+    <color name="materialcolorpicker__green">#4caf50</color>
+    <color name="materialcolorpicker__blue">#2196f3</color>
+    <color name="materialcolorpicker__grey">#b3b3b3</color>
+    <color name="materialcolorpicker__lightgrey">#d9d9d9</color>
+    <color name="materialcolorpicker__dribble">#ea4c89</color>
+    <color name="materialcolorpicker__dribbledark">#c32361</color>
+    <color name="materialcolorpicker__black">#000000</color>
+    <color name="materialcolorpicker__dialogcolor">#009688</color>
+
+    <color name="black">#000000</color>
+    <color name="top_bar_bg">#333333</color>
+    <color name="bottom_banner_bg">#333333</color>
+    <color name="line__spilt">#444444</color>
+
+    <color name="highlighted_text_material_dark">#6680cbc4</color>
+    <color name="highlighted_text_material_light">#66009688</color>
+    <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark
+    </color>
+    <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light
+    </color>
+
+    <array name="material_colors">
+        <item>#F44336</item>
+        <item>#9C27B0</item>
+        <item>#3F51B5</item>
+        <item>#03A9F4</item>
+        <item>#009688</item>
+        <item>#8BC34A</item>
+        <item>#FFEB3B</item>
+        <item>#FF9800</item>
+        <item>#795548</item>
+        <item>#607D8B</item>
+    </array>
+</resources>
