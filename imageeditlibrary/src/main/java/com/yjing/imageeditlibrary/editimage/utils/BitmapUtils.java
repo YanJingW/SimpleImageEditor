@@ -16,6 +16,21 @@
 
 package com.yjing.imageeditlibrary.editimage.utils;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Display;
+import android.view.View;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,27 +39,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory.Options;
-import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
-import android.os.Environment;
-import android.util.FloatMath;
-import android.util.Log;
-import android.view.Display;
-import android.view.View;
-
-/**
- * BitmapUtils
- *
- * @author panyi
- */
 public class BitmapUtils {
     /**
      * Used to tag logs

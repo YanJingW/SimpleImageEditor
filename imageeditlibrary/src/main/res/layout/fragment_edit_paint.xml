@@ -50,11 +50,11 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/paint_eraser"
+                android:id="@+id/paint_revoke"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_margin="5dp"
-                android:src="@drawable/eraser_normal" />
+                android:src="@drawable/edit_image_revoke_btn" />
         </LinearLayout>
 
 

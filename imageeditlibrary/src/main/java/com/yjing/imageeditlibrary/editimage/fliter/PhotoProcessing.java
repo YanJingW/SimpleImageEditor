@@ -7,8 +7,6 @@ import com.yjing.imageeditlibrary.R;
 
 /**
  * 图片处理类
- *
- * @author 潘易
  */
 public class PhotoProcessing {
     private static final String TAG = "PhotoProcessing";

@@ -26,17 +26,17 @@ public class SaveMode {
 
     /**
      * Created by wangyanjing on 2017/4/13.
+     * Edit模式顺序和操作区域的自定义view的图层顺序保持一致。在对图层保存时，对顺序有要求
      */
-
     public enum EditMode {
         NONE, //未设置模式
-        STICKERS,// 贴图模式
-        FILTER,// 滤镜模式
-        CROP,// 剪裁模式
-        ROTATE,// 旋转模式
-        TEXT,// 文字模式
+        MOSAIC,//马赛克模式
         PAINT,//绘制模式
-        MOSAIC//马赛克模式
+        STICKERS,// 贴图模式
+//        FILTER,// 滤镜模式
+//        ROTATE,// 旋转模式
+        TEXT,// 文字模式
+        CROP// 剪裁模式
     }
 
 }

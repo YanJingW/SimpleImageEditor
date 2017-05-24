@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/banner"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/height_top_bar"
+    android:layout_alignParentTop="true"
+    android:background="@color/top_bar_bg"
+    tools:showIn="@layout/activity_image_edit">
+
+    <TextView
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="18dp"
+        android:text="@string/cancel"
+        android:textColor="#ffffff"
+        android:textSize="17sp" />
+
+    <ViewFlipper
+        android:id="@+id/banner_flipper"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right"
+        android:layout_marginRight="18dp"
+        android:flipInterval="1000"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/save_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="@string/save"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/apply"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="@string/apply"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+    </ViewFlipper>
+</FrameLayout>

@@ -2,14 +2,13 @@ package com.yjing.imageeditlibrary.editimage.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import java.io.File;
 
-/**
- * Created by panyi on 16/10/23.
- */
 public class FileUtil {
     public static boolean checkFileExist(final String path) {
         if (TextUtils.isEmpty(path))
@@ -44,5 +43,10 @@ public class FileUtil {
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + (TextUtils.isEmpty(extensionName) ? "jpeg" : extensionName));
         values.put(MediaStore.Images.Media.DATA, dstPath);
         context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+
+    public static Bitmap getBitmapForPath(String path) {
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        return bitmap;
     }
 }//end class

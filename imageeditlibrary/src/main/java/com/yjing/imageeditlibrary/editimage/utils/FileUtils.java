@@ -28,9 +28,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * @author jarlen
- */
 public class FileUtils
 {
 

@@ -18,19 +18,37 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center" />
 
+        <com.yjing.imageeditlibrary.editimage.view.mosaic.MosaicView
+            android:id="@+id/mosaic_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
+
+
+        <com.yjing.imageeditlibrary.editimage.view.CustomPaintView
+            android:id="@+id/custom_paint_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
+
         <com.yjing.imageeditlibrary.editimage.view.StickerView
             android:id="@+id/sticker_panel"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+            android:layout_gravity="center" />
+
+        <com.yjing.imageeditlibrary.editimage.view.TextStickerView
+            android:id="@+id/text_sticker_panel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
 
         <com.yjing.imageeditlibrary.editimage.view.CropImageView
             android:id="@+id/crop_panel"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <com.yjing.imageeditlibrary.editimage.view.RotateImageView
             android:id="@+id/rotate_panel"
@@ -39,75 +57,10 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
-        <com.yjing.imageeditlibrary.editimage.view.TextStickerView
-            android:id="@+id/text_sticker_panel"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center"
-            android:visibility="gone" />
 
-        <com.yjing.imageeditlibrary.editimage.view.CustomPaintView
-            android:id="@+id/custom_paint_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <com.yjing.imageeditlibrary.editimage.view.mosaic.MosaicView
-            android:id="@+id/mosaic_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center"
-            android:visibility="gone" />
     </FrameLayout>
 
-
-    <FrameLayout
-        android:id="@+id/banner"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/height_top_bar"
-        android:layout_alignParentTop="true"
-        android:background="@color/top_bar_bg">
-
-        <TextView
-            android:id="@+id/back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:layout_gravity="left|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:text="@string/cancel"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
-
-        <ViewFlipper
-            android:id="@+id/banner_flipper"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp"
-            android:flipInterval="1000"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/save_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:text="@string/save"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/apply"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:text="@string/apply"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
-        </ViewFlipper>
-    </FrameLayout>
+    <include layout="@layout/edit_image_header" />
 
     <FrameLayout
         android:id="@+id/fl_main_menu"
@@ -117,7 +70,15 @@
         android:background="@color/bottom_banner_bg"></FrameLayout>
 
     <FrameLayout
-        android:id="@+id/fl_edit_bottom"
+        android:id="@+id/fl_edit_bottom_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bottom_banner_bg"
+        android:visibility="gone"></FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_edit_bottom_full"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"

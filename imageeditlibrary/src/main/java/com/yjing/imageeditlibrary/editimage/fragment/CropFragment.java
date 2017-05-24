@@ -37,9 +37,6 @@ import java.util.List;
 
 /**
  * 图片剪裁Fragment
- * 
- * @author panyi
- * 
  */
 public class CropFragment extends BaseFragment implements ImageEditInte{
     public static final int INDEX = 5;
@@ -68,6 +65,8 @@ public class CropFragment extends BaseFragment implements ImageEditInte{
 	public static int UNSELECTED_COLOR = Color.WHITE;
 	private CropRationClick mCropRationClick = new CropRationClick();
 	public TextView selctedTextView;
+	private View back_btn;
+	private View save_btn;
 
 	public static CropFragment newInstance(EditImageActivity activity) {
 		CropFragment fragment = new CropFragment();
@@ -86,6 +85,8 @@ public class CropFragment extends BaseFragment implements ImageEditInte{
 			Bundle savedInstanceState) {
 		mainView = inflater.inflate(R.layout.fragment_edit_image_crop, null);
 		backToMenu = mainView.findViewById(R.id.back_to_main);
+		back_btn = mainView.findViewById(R.id.back_btn);
+		save_btn = mainView.findViewById(R.id.save_btn);
 		ratioList = (LinearLayout) mainView.findViewById(R.id.ratio_list_group);
 		setUpRatioList();
 		return mainView;
@@ -130,12 +131,23 @@ public class CropFragment extends BaseFragment implements ImageEditInte{
 
 	@Override
 	public void onShow() {
-		mCropPanel.setVisibility(View.VISIBLE);
-		activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-		activity.mainImage.setScaleEnabled(false);// 禁用缩放
-		//
-		RectF r = activity.mainImage.getBitmapRect();
-		activity.mCropPanel.setCropRect(r);
+		//在剪切之前必须将之前的操作进行保存
+		EditImageActivity.SaveBtnClick saveBtnClick = activity.new SaveBtnClick(false, new SaveCompletedInte() {
+			@Override
+			public void completed() {
+				activity.fl_main_menu.setVisibility(View.GONE);
+				activity.banner.setVisibility(View.GONE);
+
+				mCropPanel.setVisibility(View.VISIBLE);
+				mCropPanel.setIsOperation(true);
+				activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+				activity.mainImage.setScaleEnabled(false);// 禁用缩放
+				//
+				RectF r = activity.mainImage.getBitmapRect();
+				activity.mCropPanel.setCropRect(r);
+			}
+		});
+		saveBtnClick.onClick(null);
 	}
 
 	@Override
@@ -173,6 +185,8 @@ public class CropFragment extends BaseFragment implements ImageEditInte{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
+		back_btn.setOnClickListener(new BackToMenuClick());// 返回主菜单
+		save_btn.setOnClickListener(new SaveToMenuClick());// 返回主菜单
 	}
 
 	/**
@@ -187,13 +201,31 @@ public class CropFragment extends BaseFragment implements ImageEditInte{
 			activity.backToMain();
 		}
 	}// end class
+	/**
+	 * 保存按钮逻辑
+	 *
+	 * @author panyi
+	 *
+	 */
+	private final class SaveToMenuClick implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			appleEdit(null);
+			activity.backToMain();
+		}
+	}// end class
 
 	/**
 	 * 返回主菜单
 	 */
 	public void backToMain() {
-		appleEdit(null);
+//		appleEdit(null);
+
+		activity.fl_main_menu.setVisibility(View.VISIBLE);
+		activity.banner.setVisibility(View.VISIBLE);
+
 		mCropPanel.setVisibility(View.GONE);
+		mCropPanel.setIsOperation(false);
 		activity.mainImage.setScaleEnabled(true);// 恢复缩放功能
 		if (selctedTextView != null) {
 			selctedTextView.setTextColor(UNSELECTED_COLOR);

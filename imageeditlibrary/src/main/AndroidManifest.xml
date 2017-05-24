@@ -5,6 +5,7 @@
     <application>
         <activity
             android:name="com.yjing.imageeditlibrary.editimage.EditImageActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 

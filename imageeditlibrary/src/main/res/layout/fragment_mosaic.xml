@@ -60,23 +60,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/style_size"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/image_edit_back" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/paint_eraser"
+            android:id="@+id/paint_revoke"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -87,7 +71,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_margin="5dp"
-                android:src="@drawable/eraser_normal" />
+                android:src="@drawable/edit_image_revoke_btn" />
         </LinearLayout>
     </LinearLayout>
 

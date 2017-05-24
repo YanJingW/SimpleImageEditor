@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.View;
@@ -17,10 +16,6 @@ import android.view.View;
 import com.yjing.imageeditlibrary.R;
 import com.yjing.imageeditlibrary.editimage.utils.RectUtil;
 
-
-/**
- * @author panyi
- */
 public class StickerItem {
     private static final float MIN_SCALE = 0.15f;
     private static final int HELP_BOX_PAD = 25;

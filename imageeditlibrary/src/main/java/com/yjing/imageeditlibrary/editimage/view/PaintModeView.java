@@ -7,19 +7,17 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by panyi on 17/2/11.
- */
-
-public class PaintModeView extends View {
+public class PaintModeView extends View implements EditFunctionOperationInterface{
     private Paint mPaint;
 
     private int mStokeColor;
     private float mStokeWidth = -1;
 
     private float mRadius;
+    private boolean isOperation = false;
 
     public PaintModeView(Context context) {
         super(context);
@@ -81,4 +79,18 @@ public class PaintModeView extends View {
         return mStokeColor;
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return isOperation ? super.onTouchEvent(event) : isOperation;
+    }
+
+    @Override
+    public void setIsOperation(boolean isOperation) {
+        this.isOperation = isOperation;
+    }
+
+    @Override
+    public Boolean getIsOperation() {
+        return null;
+    }
 }//end class

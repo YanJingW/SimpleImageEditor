@@ -34,10 +34,7 @@ import com.yjing.imageeditlibrary.editimage.view.mosaic.MosaicView;
 
 /**
  * 图片编辑 主页面
- *
- * @author panyi
- *         <p>
- *         包含 1.贴图 2.滤镜 3.剪裁 4.底图旋转 功能
+ * 包含 1.贴图 2.滤镜 3.剪裁 4.底图旋转 功能
  */
 public class EditImageActivity extends BaseActivity {
     public static final String FILE_PATH = "file_path";
@@ -75,11 +72,12 @@ public class EditImageActivity extends BaseActivity {
     private SaveImageTask mSaveImageTask;
     public EditFactory editFactory;
     public View fl_main_menu;
+    public View banner;
 
     /**
      * @param context
      * @param editImagePath 原图路径
-     * @param outputPath 图片保存路径
+     * @param outputPath    图片保存路径
      * @param requestCode
      */
     public static void start(Activity context, final String editImagePath, final String outputPath, final int requestCode) {
@@ -118,10 +116,11 @@ public class EditImageActivity extends BaseActivity {
         bannerFlipper = (ViewFlipper) findViewById(R.id.banner_flipper);
         bannerFlipper.setInAnimation(this, R.anim.in_bottom_to_top);
         bannerFlipper.setOutAnimation(this, R.anim.out_bottom_to_top);
+        banner = findViewById(R.id.banner);
         applyBtn = findViewById(R.id.apply);
         applyBtn.setOnClickListener(new ApplyBtnClick());
         saveBtn = findViewById(R.id.save_btn);
-        saveBtn.setOnClickListener(new SaveBtnClick());
+        saveBtn.setOnClickListener(new SaveBtnClick(true, null));
 
         mainImage = (ImageViewTouch) findViewById(R.id.main_image);
         backBtn = findViewById(R.id.back_btn);// 退出按钮
@@ -140,9 +139,10 @@ public class EditImageActivity extends BaseActivity {
         mMosaicView = (MosaicView) findViewById(R.id.mosaic_view);
 
         //放功能键的容器
-        View fl_edit_bottom = findViewById(R.id.fl_edit_bottom);
+        View fl_edit_bottom_height = findViewById(R.id.fl_edit_bottom_height);
+        View fl_edit_bottom_full = findViewById(R.id.fl_edit_bottom_full);
         View fl_edit_above_mainmenu = findViewById(R.id.fl_edit_above_mainmenu);
-        editFactory = new EditFactory(this, fl_edit_bottom, fl_edit_above_mainmenu);
+        editFactory = new EditFactory(this, fl_edit_bottom_height, fl_edit_bottom_full, fl_edit_above_mainmenu);
 
         //主要按键布局
         fl_main_menu = findViewById(R.id.fl_main_menu);
@@ -203,8 +203,16 @@ public class EditImageActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-
+        Boolean ifFinish = true;
+        //添加文字页面比较特殊 全屏操作 需要返回至主界面 而不是退出
+        if ((SaveMode.getInstant().getMode() == SaveMode.EditMode.CROP || SaveMode.getInstant().getMode() == SaveMode.EditMode.TEXT) && editFactory.getCurrentMode() != null) {
+            ifFinish = false;
+        }
         backToMain();
+
+        if (!ifFinish) {
+            return;
+        }
 
         if (canAutoExit()) {
             onSaveTaskDone();
@@ -247,30 +255,90 @@ public class EditImageActivity extends BaseActivity {
      *
      * @author panyi
      */
-    private final class SaveBtnClick implements OnClickListener {
+    public final class SaveBtnClick implements OnClickListener {
+        private final Boolean isSaveImageToLocal;
+        private final SaveCompletedInte inte;
+        private SaveMode.EditMode[] modes;
+        private int modeIndex;
+
+        public SaveBtnClick(Boolean isSaveImageToLocal, SaveCompletedInte inte) {
+            this.isSaveImageToLocal = isSaveImageToLocal;
+            this.inte = inte;
+        }
+
         @Override
         public void onClick(View v) {
-            //对当前正在处理的状态进行保存
-            ImageEditInte currentMode = editFactory.getCurrentMode();
-            if (currentMode != null) {
-                currentMode.appleEdit(new SaveCompletedInte() {
-                    @Override
-                    public void completed() {
+            //迭代法去保存图片
+            modes = SaveMode.EditMode.values();
+            modeIndex = 0;
+            applyEdit();
+
+//            //对当前正在处理的状态进行保存
+//            ImageEditInte currentMode = editFactory.getCurrentMode();
+//            if (currentMode != null) {
+//                currentMode.appleEdit(new SaveCompletedInte() {
+//                    @Override
+//                    public void completed() {
+//                        if (mOpTimes == 0) {//并未修改图片
+//                            onSaveTaskDone();
+//                        } else {
+//                            doSaveImage();
+//                        }
+//                    }
+//                });
+//            } else {
+//                if (mOpTimes == 0) {//并未修改图片
+//                    onSaveTaskDone();
+//                } else {
+//                    doSaveImage();
+//                }
+//            }
+
+        }
+
+
+        /**
+         * 迭代方式一层一层保存图片
+         */
+        private void applyEdit() {
+            if (modes[modeIndex] == SaveMode.EditMode.NONE || modes[modeIndex] == SaveMode.EditMode.CROP) {
+                modeIndex++;
+                if (modeIndex < modes.length) {
+                    applyEdit();
+                } else {
+                    if (isSaveImageToLocal) {
                         if (mOpTimes == 0) {//并未修改图片
                             onSaveTaskDone();
                         } else {
                             doSaveImage();
                         }
                     }
-                });
-            }else {
-                if (mOpTimes == 0) {//并未修改图片
-                    onSaveTaskDone();
-                } else {
-                    doSaveImage();
+                    if (inte != null) {
+                        inte.completed();
+                    }
                 }
+                return;
             }
-
+            ImageEditInte fragment = (ImageEditInte) editFactory.getFragment(modes[modeIndex++]);
+            fragment.appleEdit(new SaveCompletedInte() {
+                @Override
+                public void completed() {
+                    if (modeIndex < modes.length) {
+                        applyEdit();
+                    } else {
+                        if (isSaveImageToLocal) {
+                            if (mOpTimes == 0) {//并未修改图片
+                                onSaveTaskDone();
+                            } else {
+                                doSaveImage();
+                            }
+                        }
+                        if (inte != null) {
+                            inte.completed();
+                        }
+                    }
+                }
+            });
         }
     }// end inner class
 

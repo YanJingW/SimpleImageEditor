@@ -7,8 +7,6 @@ import android.util.AttributeSet;
 /**
  * 禁用ViewPager滑动事件
  * 
- * @author panyi
- * 
  */
 public class CustomViewPager extends ViewPager {
 	private boolean isCanScroll = false;

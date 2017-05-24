@@ -24,8 +24,6 @@ import com.yjing.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
 
 /**
  * 滤镜列表fragment
- *
- * @author panyi
  */
 public class FliterListFragment extends BaseFragment implements ImageEditInte {
     public static final int INDEX = 7;
@@ -75,7 +73,7 @@ public class FliterListFragment extends BaseFragment implements ImageEditInte {
      * 返回主菜单
      */
     public void backToMain() {
-        appleEdit(null);
+//        appleEdit(null);
         currentBitmap = activity.mainBitmap;
         fliterBit = null;
         activity.mainImage.setImageBitmap(activity.mainBitmap);// 返回原图

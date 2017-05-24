@@ -25,8 +25,7 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
     private View action_base;
     private View action_ground_glass;
     private View action_flower;
-    private View style_size;
-    private View mEraserView;
+    private View mRevokeView;
     private View preMosaicButton;
 
     public MosaicFragment() {
@@ -53,8 +52,7 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
         action_base = mainView.findViewById(R.id.action_base);
         action_ground_glass = mainView.findViewById(R.id.action_ground_glass);
         action_flower = mainView.findViewById(R.id.action_flower);
-        style_size = mainView.findViewById(R.id.style_size);
-        mEraserView = mainView.findViewById(R.id.paint_eraser);
+        mRevokeView = mainView.findViewById(R.id.paint_revoke);
         return mainView;
     }
 
@@ -65,8 +63,7 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
         action_base.setOnClickListener(this);
         action_ground_glass.setOnClickListener(this);
         action_flower.setOnClickListener(this);
-        style_size.setOnClickListener(this);
-        mEraserView.setOnClickListener(this);
+        mRevokeView.setOnClickListener(this);
     }
 
 
@@ -93,16 +90,9 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
                     R.drawable.hi4);
             bit = FileUtils.ResizeBitmap(bit, mainBitmap.getWidth(), mainBitmap.getHeight());
             mMosaicView.setMosaicResource(bit);
-        } else if (i == R.id.style_size) {
-//            if (size >= 30) {
-//                size = 5;
-//            } else {
-//                size += 5;
-//            }
-            mMosaicView.setMosaicBrushWidth(30);
-
-        } else if (i == R.id.paint_eraser) {
-            mMosaicView.setMosaicType(MosaicUtil.MosaicType.ERASER);
+        } else if (i == R.id.paint_revoke) {
+//            mMosaicView.setMosaicType(MosaicUtil.MosaicType.ERASER);
+            mMosaicView.undo();
         } else {
         }
     }
@@ -156,14 +146,16 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
      * 返回主菜单
      */
     public void backToMain() {
-        appleEdit(null);
+//        appleEdit(null);
         activity.mainImage.setVisibility(View.VISIBLE);
-        this.mMosaicView.setVisibility(View.GONE);
+//        this.mMosaicView.setVisibility(View.GONE);
+        mMosaicView.setIsOperation(false);
     }
 
 
     public void onShow() {
-        this.mMosaicView.setVisibility(View.VISIBLE);
+//        this.mMosaicView.setVisibility(View.VISIBLE);
+        mMosaicView.setIsOperation(true);
         initSetting();
     }
 

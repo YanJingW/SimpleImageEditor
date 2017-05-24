@@ -26,8 +26,6 @@ import com.yjing.imageeditlibrary.editimage.view.PaintModeView;
  * 用户自由绘制模式 操作面板
  * 可设置画笔粗细 画笔颜色
  * custom draw mode panel
- *
- * @author panyi
  */
 public class PaintFragment extends BaseFragment implements View.OnClickListener, ImageEditInte {
     public static final String TAG = PaintFragment.class.getName();
@@ -40,7 +38,7 @@ public class PaintFragment extends BaseFragment implements View.OnClickListener,
     private PopupWindow setStokenWidthWindow;
     private SeekBar mStokenWidthSeekBar;
 
-    private ImageView mEraserView;
+    private ImageView mRevokeView;
 
     public boolean isEraser = false;//是否是擦除模式
 
@@ -66,7 +64,7 @@ public class PaintFragment extends BaseFragment implements View.OnClickListener,
         View mainView = inflater.inflate(R.layout.fragment_edit_paint, null);
         mPaintModeView = (PaintModeView) mainView.findViewById(R.id.paint_thumb);
         colorSeekBar = (ColorSeekBar) mainView.findViewById(R.id.colorSlider);
-        mEraserView = (ImageView) mainView.findViewById(R.id.paint_eraser);
+        mRevokeView = (ImageView) mainView.findViewById(R.id.paint_revoke);
         return mainView;
     }
 
@@ -78,8 +76,7 @@ public class PaintFragment extends BaseFragment implements View.OnClickListener,
 
         initStokeWidthPopWindow();
 
-        mEraserView.setOnClickListener(this);
-        updateEraserView();
+        mRevokeView.setOnClickListener(this);
 
         colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @Override
@@ -93,8 +90,8 @@ public class PaintFragment extends BaseFragment implements View.OnClickListener,
     public void onClick(View v) {
         if (v == mPaintModeView) {//设置绘制画笔粗细
             setStokeWidth();
-        } else if (v == mEraserView) {
-            toggleEraserView();
+        } else if (v == mRevokeView) {//撤销功能
+            mPaintView.undo();
         }//end if
     }
 
@@ -102,13 +99,15 @@ public class PaintFragment extends BaseFragment implements View.OnClickListener,
      * 返回主菜单
      */
     public void backToMain() {
-        appleEdit(null);
+//        appleEdit(null);
         activity.mainImage.setVisibility(View.VISIBLE);
-        this.mPaintView.setVisibility(View.GONE);
+//        this.mPaintView.setVisibility(View.GONE);
+        mPaintView.setIsOperation(false);
     }
 
     public void onShow() {
-        this.mPaintView.setVisibility(View.VISIBLE);
+//        this.mPaintView.setVisibility(View.VISIBLE);
+        mPaintView.setIsOperation(true);
     }
 
     /**
@@ -126,8 +125,6 @@ public class PaintFragment extends BaseFragment implements View.OnClickListener,
      * 更新画笔view
      */
     private void updatePaintView() {
-        isEraser = false;
-        updateEraserView();
 
         this.mPaintView.setColor(mPaintModeView.getStokenColor());
         this.mPaintView.setWidth(mPaintModeView.getStokenWidth());
@@ -192,16 +189,6 @@ public class PaintFragment extends BaseFragment implements View.OnClickListener,
         mPaintModeView.setPaintStrokeWidth(20);
 
         updatePaintView();
-    }
-
-    private void toggleEraserView() {
-        isEraser = !isEraser;
-        updateEraserView();
-    }
-
-    private void updateEraserView() {
-        mEraserView.setImageResource(isEraser ? R.drawable.eraser_seleced : R.drawable.eraser_normal);
-        mPaintView.setEraser(isEraser);
     }
 
     @Override

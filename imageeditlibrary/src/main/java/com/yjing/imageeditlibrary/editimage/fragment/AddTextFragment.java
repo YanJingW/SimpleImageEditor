@@ -114,10 +114,14 @@ public class AddTextFragment extends BaseFragment implements ImageEditInte {
 
     @Override
     public void onShow() {
-        mTextStickerView.setVisibility(View.VISIBLE);
-        if (mInputText != null) {
-            mInputText.clearFocus();
-        }
+        mainView.setVisibility(View.VISIBLE);
+//        mTextStickerView.setVisibility(View.VISIBLE);
+        mTextStickerView.setIsOperation(true);
+//        if (mInputText != null) {
+//            mInputText.clearFocus();
+//        }
+        //弹起键盘
+        showInput();
     }
 
     @Override
@@ -147,6 +151,15 @@ public class AddTextFragment extends BaseFragment implements ImageEditInte {
         }
     }
 
+    public void showInput() {
+        mInputText.setFocusable(true);
+        mInputText.setFocusableInTouchMode(true);
+        mInputText.requestFocus();
+        InputMethodManager inputManager =
+                (InputMethodManager) mInputText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(mInputText, 0);
+    }
+
     public boolean isInputMethodShow() {
         return imm.isActive();
     }
@@ -156,9 +169,10 @@ public class AddTextFragment extends BaseFragment implements ImageEditInte {
      */
     public void backToMain() {
         hideInput();
-        appleEdit(null);
+//        appleEdit(null);
         activity.mainImage.setVisibility(View.VISIBLE);
-        mTextStickerView.setVisibility(View.GONE);
+//        mTextStickerView.setVisibility(View.GONE);
+        mTextStickerView.setIsOperation(false);
     }
 
     /**

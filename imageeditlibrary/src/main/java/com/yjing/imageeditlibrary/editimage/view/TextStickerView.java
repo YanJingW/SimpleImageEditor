@@ -23,10 +23,8 @@ import java.util.List;
 
 /**
  * 文本贴图处理控件
- * <p/>
- * Created by panyi on 2016/6/9.
  */
-public class TextStickerView extends View {
+public class TextStickerView extends View implements EditFunctionOperationInterface{
     public static final float TEXT_SIZE_DEFAULT = 80;
     public static final int PADDING = 32;
     //public static final int PADDING = 0;
@@ -76,6 +74,7 @@ public class TextStickerView extends View {
     private boolean mAutoNewLine = false;//是否需要自动换行
     private List<String> mTextContents = new ArrayList<String>(2);//存放所写的文字内容
     private String mText;
+    private boolean isOperation = false;
 
     public TextStickerView(Context context) {
         super(context);
@@ -240,6 +239,11 @@ public class TextStickerView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if (!isOperation) {
+            return isOperation;
+        }
+
         boolean ret = super.onTouchEvent(event);// 是否向下传递事件标志 true为消耗
 
         int action = event.getAction();
@@ -313,7 +317,8 @@ public class TextStickerView extends View {
         if (mEditText != null) {
             mEditText.setText(null);
         }
-        //setText(null);
+        mTextContents.clear();
+        setText(null);
     }
 
 
@@ -391,4 +396,13 @@ public class TextStickerView extends View {
     }
 
 
+    @Override
+    public void setIsOperation(boolean isOperation) {
+        this.isOperation = isOperation;
+    }
+
+    @Override
+    public Boolean getIsOperation() {
+        return null;
+    }
 }//end class

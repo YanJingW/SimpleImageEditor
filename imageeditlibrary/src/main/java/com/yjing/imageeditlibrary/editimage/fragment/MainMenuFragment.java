@@ -5,13 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.yjing.imageeditlibrary.R;
 import com.yjing.imageeditlibrary.editimage.EditImageActivity;
 import com.yjing.imageeditlibrary.editimage.SaveMode;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 /**
  * 工具栏主菜单
@@ -29,7 +26,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     private View mTextBtn;//文字型贴图添加
     private View mPaintBtn;//编辑按钮
     private View mosaicBtn;//马赛克按钮
-    private View preToolButton;
 
     public static MainMenuFragment newInstance(EditImageActivity activity) {
         MainMenuFragment fragment = new MainMenuFragment();
@@ -73,20 +69,24 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
         SaveMode.EditMode preMode = SaveMode.getInstant().getMode();//点击之前处于的编辑模式
-        SaveMode.EditMode clickMode = getEditMode(v);//当前点击后将要处于的模式，默认为NONE
-
-        if (clickMode == SaveMode.EditMode.STICKERS || clickMode == SaveMode.EditMode.CROP) {
-            Toast.makeText(getActivity(), "未开通", Toast.LENGTH_SHORT).show();
-            return;
+        SaveMode.EditMode clickMode = getEditModeForView(v);
+        //1.确定当前要处于模式
+        if (preMode == clickMode) {//如果点击前和点击后处于一种模式，则隐藏当前编辑模式（设置当前模式为NONE）
+            clickMode = SaveMode.EditMode.NONE;
+        }
+        //2.更改按钮状态
+        if (preMode == SaveMode.EditMode.PAINT || preMode == SaveMode.EditMode.MOSAIC) {
+            //设置上次选中的模式按钮状态为false
+            getButtonForMode(preMode).setSelected(false);
         }
 
-        //更改buttom状态
-        changeToolsSelector(v);
+        if (clickMode == SaveMode.EditMode.PAINT || clickMode == SaveMode.EditMode.MOSAIC) {
+            getButtonForMode(clickMode).setSelected(true);
+        }
 
-        //如果点击前和点击后处于一种模式，则隐藏当前编辑模式（设置当前模式为NONE）
-        if (preMode == clickMode) {
+        //3.设置当前所处于的模式
+        if (clickMode == SaveMode.EditMode.NONE) {
             activity.backToMain();
         } else {
             //0.退出之前模式
@@ -107,7 +107,29 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private SaveMode.EditMode getEditMode(View v) {
+    private View getButtonForMode(SaveMode.EditMode mode) {
+        View v = null;
+        switch (mode) {
+            case PAINT:
+                v = mPaintBtn;
+                break;
+            case MOSAIC:
+                v = mosaicBtn;
+                break;
+            case STICKERS:
+                v = stickerBtn;
+                break;
+            case CROP:
+                v = cropBtn;
+                break;
+            case TEXT:
+                v = mTextBtn;
+                break;
+        }
+        return v;
+    }
+
+    private SaveMode.EditMode getEditModeForView(View v) {
         SaveMode.EditMode clickMode = SaveMode.EditMode.NONE;
         if (v == stickerBtn) {
             clickMode = SaveMode.EditMode.STICKERS;
@@ -127,21 +149,4 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         return clickMode;
     }
 
-    private void changeToolsSelector(View v) {
-
-        if (preToolButton != null) {
-            preToolButton.setSelected(false);
-        }
-        //更新按钮状态
-        View toolsButton = ((ViewGroup) v).getChildAt(0);
-        //如果点击前和点击后处于一种模式，则隐藏当前编辑模式（设置当前模式为NONE）
-        if (preToolButton == toolsButton) {
-            toolsButton.setSelected(false);
-            preToolButton = null;
-            activity.backToMain();
-        } else {
-            toolsButton.setSelected(true);
-            preToolButton = toolsButton;
-        }
-    }
 }// end class

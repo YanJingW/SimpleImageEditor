@@ -17,11 +17,9 @@ import com.yjing.imageeditlibrary.editimage.utils.PaintUtil;
 
 /**
  * 剪切图片
- * 
- * @author 潘易
- * 
+ *
  */
-public class CropImageView extends View {
+public class CropImageView extends View implements EditFunctionOperationInterface{
 	private static int STATUS_IDLE = 1;// 空闲状态
 	private static int STATUS_MOVE = 2;// 移动状态
 	private static int STATUS_SCALE = 3;// 缩放状态
@@ -50,6 +48,7 @@ public class CropImageView extends View {
 	private RectF tempRect = new RectF();// 临时存贮矩形数据
 
 	private float ratio = -1;// 剪裁缩放比率
+	private boolean isOperation = false;
 
 	public CropImageView(Context context) {
 		super(context);
@@ -158,6 +157,11 @@ public class CropImageView extends View {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+
+		if (!isOperation) {
+			return isOperation;
+		}
+
 		boolean ret = super.onTouchEvent(event);// 是否向下传递事件标志 true为消耗
 		int action = event.getAction();
 		float x = event.getX();
@@ -404,4 +408,13 @@ public class CropImageView extends View {
 		this.ratio = ratio;
 	}
 
+	@Override
+	public void setIsOperation(boolean isOperation) {
+		this.isOperation = isOperation;
+	}
+
+	@Override
+	public Boolean getIsOperation() {
+		return isOperation;
+	}
 }// end class

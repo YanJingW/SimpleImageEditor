@@ -2,9 +2,6 @@ package com.yjing.imageeditlibrary.editimage.utils;
 
 /**
  * 3x3
- * 
- * @author panyi
- * 
  */
 public class Matrix3 {
 	private float[] data;

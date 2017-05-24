@@ -15,8 +15,6 @@ import com.yjing.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.yjing.imageeditlibrary.editimage.utils.Matrix3;
 
 /**
- * Created by panyi on 2016/8/14.
- * <p/>
  * 贴图合成任务 抽象类
  */
 public abstract class StickerTask extends AsyncTask<Bitmap, Void, Bitmap> {

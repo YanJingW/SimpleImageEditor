@@ -26,8 +26,6 @@ import java.io.IOException;
 
 /**
  * 图片旋转Fragment
- *
- * @author 潘易
  */
 public class RotateFragment extends BaseFragment implements ImageEditInte {
     public static final int INDEX = 8;
@@ -90,12 +88,12 @@ public class RotateFragment extends BaseFragment implements ImageEditInte {
         activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.mainImage.setVisibility(View.GONE);
 
-        activity.mRotatePanel.addBit(activity.mainBitmap, activity.mainImage.getBitmapRect());
+        mRotatePanel.addBit(activity.mainBitmap, activity.mainImage.getBitmapRect());
         if (mSeekBar != null) {
             mSeekBar.setProgress(0);
         }
-        activity.mRotatePanel.reset();
-        activity.mRotatePanel.setVisibility(View.VISIBLE);
+        mRotatePanel.reset();
+//        mRotatePanel.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -148,9 +146,9 @@ public class RotateFragment extends BaseFragment implements ImageEditInte {
      * 返回主菜单
      */
     public void backToMain() {
-        appleEdit(null);
+//        appleEdit(null);
         activity.mainImage.setVisibility(View.VISIBLE);
-        this.mRotatePanel.setVisibility(View.GONE);
+//        this.mRotatePanel.setVisibility(View.GONE);
     }
 
 

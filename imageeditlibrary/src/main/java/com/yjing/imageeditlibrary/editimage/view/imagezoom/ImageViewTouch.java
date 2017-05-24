@@ -24,7 +24,7 @@ public class ImageViewTouch extends ImageViewTouchBase {
     protected OnGestureListener mGestureListener;
     protected OnScaleGestureListener mScaleListener;
     protected boolean mDoubleTapEnabled = true;
-    protected boolean mScaleEnabled = true;
+    protected boolean mScaleEnabled = false;//暂时禁用图片的缩放功能
     protected boolean mScrollEnabled = true;
     private OnImageViewTouchDoubleTapListener mDoubleTapListener;
     private OnImageViewTouchSingleTapListener mSingleTapListener;
@@ -63,8 +63,13 @@ public class ImageViewTouch extends ImageViewTouchBase {
         mDoubleTapEnabled = value;
     }
 
+    /**
+     * 暂时禁用图片的缩放功能
+     * @param value
+     */
     public void setScaleEnabled(boolean value) {
-        mScaleEnabled = value;
+//        mScaleEnabled = value;
+        mScaleEnabled = false;
         setDoubleTapEnabled(value);
     }
 

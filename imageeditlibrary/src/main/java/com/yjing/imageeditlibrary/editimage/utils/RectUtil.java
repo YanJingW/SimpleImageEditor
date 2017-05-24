@@ -5,9 +5,6 @@ import android.graphics.RectF;
 
 import com.yjing.imageeditlibrary.editimage.view.TextStickerView;
 
-/**
- * Created by panyi on 2016/6/16.
- */
 public class RectUtil {
     /**
      * 缩放指定矩形

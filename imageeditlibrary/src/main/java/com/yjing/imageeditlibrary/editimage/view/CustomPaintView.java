@@ -5,50 +5,53 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.graphics.Path;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by panyi on 17/2/11.
- */
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class CustomPaintView extends View {
+public class CustomPaintView extends View implements EditFunctionOperationInterface {
     private Paint mPaint;
     private Bitmap mDrawBit;
-    private Paint mEraserPaint;
 
     private Canvas mPaintCanvas = null;
 
     private float last_x;
     private float last_y;
-    private boolean eraser;
 
-    private int mColor;
+    private boolean isOperation = false;
+    private Path mPath;
+
+
+    /**
+     * 模拟栈，保存涂鸦操作，便于撤销
+     */
+    private CopyOnWriteArrayList<PaintPath> mUndoStack = new CopyOnWriteArrayList<>();
 
     public CustomPaintView(Context context) {
         super(context);
-        init(context);
+        initPaint();
     }
 
     public CustomPaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        initPaint();
     }
 
     public CustomPaintView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        initPaint();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CustomPaintView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
+        initPaint();
     }
 
     @Override
@@ -60,34 +63,39 @@ public class CustomPaintView extends View {
         }
     }
 
+    /**
+     * 创建画布
+     */
     private void generatorBit() {
         mDrawBit = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         mPaintCanvas = new Canvas(mDrawBit);
     }
 
-    private void init(Context context) {
+    private void initPaint() {
         mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-
         mPaint.setColor(Color.RED);
+        mPaint.setAntiAlias(true);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStyle(Paint.Style.STROKE);
+    }
 
-
-        mEraserPaint = new Paint();
-        mEraserPaint.setAlpha(0);
-        mEraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        mEraserPaint.setAntiAlias(true);
-        mEraserPaint.setDither(true);
-        mEraserPaint.setStyle(Paint.Style.STROKE);
-        mEraserPaint.setStrokeJoin(Paint.Join.ROUND);
-        mEraserPaint.setStrokeCap(Paint.Cap.ROUND);
-        mEraserPaint.setStrokeWidth(40);
+    /**
+     * 复制一支信息相同的画笔
+     */
+    private Paint copyPaint() {
+        Paint paint = new Paint();
+        paint.setColor(mPaint.getColor());
+        paint.setAntiAlias(mPaint.isAntiAlias());
+        paint.setStrokeJoin(mPaint.getStrokeJoin());
+        paint.setStrokeCap(mPaint.getStrokeCap());
+        paint.setStyle(mPaint.getStyle());
+        paint.setStrokeWidth(mPaint.getStrokeWidth());
+        return paint;
     }
 
     public void setColor(int color) {
-        this.mColor = color;
-        this.mPaint.setColor(mColor);
+        this.mPaint.setColor(color);
     }
 
     public void setWidth(float width) {
@@ -104,26 +112,43 @@ public class CustomPaintView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        //外部通过isOperation来控制是否要对此涂鸦view进行操作
+        if (!isOperation) {
+            return isOperation;
+        }
+
         boolean ret = super.onTouchEvent(event);
         float x = event.getX();
         float y = event.getY();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                // 每次down下去重新new一个Path
+                mPath = new Path();
+                Log.i("wangyanjing", "新创建了一个mPath"+mPath.hashCode());
+                mPath.moveTo(x, y);
                 ret = true;
                 last_x = x;
                 last_y = y;
                 break;
             case MotionEvent.ACTION_MOVE:
                 ret = true;
-                mPaintCanvas.drawLine(last_x, last_y, x, y, eraser ? mEraserPaint : mPaint);
+                // 从x1,y1到x2,y2画一条贝塞尔曲线，更平滑(直接用mPath.lineTo也是可以的)
+                mPath.lineTo(x, y);
+                mPaintCanvas.drawPath(mPath, mPaint);
+//                mPaintCanvas.drawLine(last_x, last_y, x, y, mPaint);
                 last_x = x;
                 last_y = y;
                 this.postInvalidate();
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                mUndoStack.add(new PaintPath(mPath, copyPaint()));
+                Log.i("wangyanjing", "数组里面加入了一个mPath"+mPath.hashCode()+"===="+mUndoStack.size());
+                mPaintCanvas.drawPath(mPath, mPaint);
                 ret = false;
+                this.postInvalidate();
                 break;
         }
         return ret;
@@ -137,20 +162,52 @@ public class CustomPaintView extends View {
         }
     }
 
-    public void setEraser(boolean eraser) {
-        this.eraser = eraser;
-        mPaint.setColor(eraser ? Color.TRANSPARENT : mColor);
-    }
-
     public Bitmap getPaintBit() {
         return mDrawBit;
     }
 
     public void reset() {
+        resetCanvas();
+        //清空保存操作的栈容器
+        mUndoStack.clear();
+    }
+
+    private void resetCanvas() {
         if (mDrawBit != null && !mDrawBit.isRecycled()) {
             mDrawBit.recycle();
         }
+        invalidate();
 
         generatorBit();
+    }
+
+    @Override
+    public void setIsOperation(boolean isOperation) {
+        this.isOperation = isOperation;
+    }
+
+    @Override
+    public Boolean getIsOperation() {
+        return null;
+    }
+
+
+    /**
+     * 撤销
+     */
+    public void undo() {
+        if (mUndoStack.size() > 0) {
+            PaintPath undoable = mUndoStack.remove(mUndoStack.size() - 1);
+            Log.i("wangyanjing", "撤销了一个mPath"+undoable.hashCode()+"===="+mUndoStack.size());
+            resetCanvas();
+            draw(mPaintCanvas, mUndoStack);
+            invalidate();
+        }
+    }
+
+    private void draw(Canvas mPaintCanvas, CopyOnWriteArrayList<PaintPath> mUndoStack) {
+        for (PaintPath paintPath : mUndoStack) {
+            mPaintCanvas.drawPath(paintPath.getPath(), paintPath.getPaint());
+        }
     }
 }//end class

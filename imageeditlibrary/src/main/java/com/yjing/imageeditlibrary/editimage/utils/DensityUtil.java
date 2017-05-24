@@ -2,10 +2,6 @@ package com.yjing.imageeditlibrary.editimage.utils;
 
 import android.content.Context;
 
-/**
- * Created by panyi on 17/2/11.
- */
-
 public class DensityUtil {
 
     /**

@@ -1,8 +1,6 @@
 package com.yjing.imageeditlibrary.editimage.view;
 
 
-import java.util.LinkedHashMap;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,12 +10,12 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.LinkedHashMap;
+
 /**
  * 贴图操作控件
- *
- * @author panyi
  */
-public class StickerView extends View {
+public class StickerView extends View implements EditFunctionOperationInterface{
     private static int STATUS_IDLE = 0;
     private static int STATUS_MOVE = 1;// 移动状态
     private static int STATUS_DELETE = 2;// 删除状态
@@ -33,6 +31,7 @@ public class StickerView extends View {
     private Paint boxPaint = new Paint();
 
     private LinkedHashMap<Integer, StickerItem> bank = new LinkedHashMap<Integer, StickerItem>();// 存贮每层贴图数据
+    private boolean isOperation = false;
 
     public StickerView(Context context) {
         super(context);
@@ -58,6 +57,10 @@ public class StickerView extends View {
 
     }
 
+    /**
+     * 添加图片
+     * @param addBit
+     */
     public void addBitImage(final Bitmap addBit) {
         StickerItem item = new StickerItem(this.getContext());
         item.init(addBit, this);
@@ -89,6 +92,11 @@ public class StickerView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if (!isOperation) {
+            return isOperation;
+        }
+
         boolean ret = super.onTouchEvent(event);// 是否向下传递事件标志 true为消耗
 
         int action = event.getAction();
@@ -180,5 +188,15 @@ public class StickerView extends View {
     public void clear() {
         bank.clear();
         this.invalidate();
+    }
+
+    @Override
+    public void setIsOperation(boolean isOperation) {
+        this.isOperation = isOperation;
+    }
+
+    @Override
+    public Boolean getIsOperation() {
+        return null;
     }
 }// end class
