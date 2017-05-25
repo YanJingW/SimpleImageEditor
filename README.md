@@ -3,5 +3,7 @@
 
 ### APK Demo
 扫码下载
-![image](https://github.com/YanJingW/SimpleImageEditor/tree/master/assets/edit_erweima.png)
+
+![image](https://github.com/YanJingW/SimpleImageEditor/blob/master/assets/edit_erweima.png )
+
 二维码显示不出请点击 [下载Demo](http://fir.im/imageEditAndroid )
