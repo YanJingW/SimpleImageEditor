@@ -4,12 +4,17 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
 
+    lintOptions {
+        checkReleaseBuilds false//不开启lint检查，建议抽空开启为true打包，然后修复各种不规范的地方；
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.yjing.imageeditor"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 100
+        versionName "1.0.0"
     }
     buildTypes {
         release {
