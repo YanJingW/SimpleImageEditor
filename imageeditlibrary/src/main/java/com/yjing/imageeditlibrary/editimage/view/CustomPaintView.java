@@ -179,7 +179,6 @@ public class CustomPaintView extends View implements EditFunctionOperationInterf
             mDrawBit.recycle();
         }
         invalidate();
-
         generatorBit();
     }
 

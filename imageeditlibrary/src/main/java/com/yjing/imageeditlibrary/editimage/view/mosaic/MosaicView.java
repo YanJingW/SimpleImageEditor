@@ -122,8 +122,6 @@ public class MosaicView extends View implements EditFunctionOperationInterface {
             Log.e("jarlen", "setMosaicBackgroundResource : bitmap == null");
             return;
         }
-
-        reset();
         mImageWidth = bitmap.getWidth();
         mImageHeight = bitmap.getHeight();
 
