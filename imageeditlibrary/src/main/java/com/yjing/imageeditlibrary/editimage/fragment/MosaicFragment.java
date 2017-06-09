@@ -15,9 +15,11 @@ import com.yjing.imageeditlibrary.editimage.EditImageActivity;
 import com.yjing.imageeditlibrary.editimage.inter.ImageEditInte;
 import com.yjing.imageeditlibrary.editimage.inter.SaveCompletedInte;
 import com.yjing.imageeditlibrary.editimage.task.StickerTask;
-import com.yjing.imageeditlibrary.utils.FileUtils;
 import com.yjing.imageeditlibrary.editimage.view.mosaic.MosaicUtil;
 import com.yjing.imageeditlibrary.editimage.view.mosaic.MosaicView;
+import com.yjing.imageeditlibrary.utils.FileUtils;
+
+import java.util.HashMap;
 
 
 public class MosaicFragment extends BaseFragment implements View.OnClickListener, ImageEditInte {
@@ -28,6 +30,7 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
     private View action_flower;
     private View mRevokeView;
     private View preMosaicButton;
+    private HashMap<MosaicUtil.Effect, Bitmap> mosaicResMap;
 
     public MosaicFragment() {
     }
@@ -72,28 +75,49 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
         int i = v.getId();
 
         if (i == R.id.action_base) {
-            mMosaicView.setMosaicBackgroundResource(mainBitmap);
-            Bitmap bitmapMosaic = MosaicUtil.getMosaic(mainBitmap);
-            mMosaicView.setMosaicResource(bitmapMosaic);
 
+            if (hasMosaicRes(MosaicUtil.Effect.MOSAIC)) {
+                Bitmap bit = MosaicUtil.getMosaic(activity.mainBitmap);
+                mosaicResMap.put(MosaicUtil.Effect.MOSAIC, bit);
+                mMosaicView.setMosaicResource(mosaicResMap);
+            }
+            mMosaicView.setMosaicEffect(MosaicUtil.Effect.MOSAIC);
             changeToolsSelector(v);
         } else if (i == R.id.action_ground_glass) {
-            mMosaicView.setMosaicBackgroundResource(mainBitmap);
-            Bitmap bitmapBlur = MosaicUtil.getBlur(mainBitmap);
-            mMosaicView.setMosaicResource(bitmapBlur);
 
+            if (hasMosaicRes(MosaicUtil.Effect.BLUR)) {
+                Bitmap blur = MosaicUtil.getBlur(activity.mainBitmap);
+                mosaicResMap.put(MosaicUtil.Effect.BLUR, blur);
+                mMosaicView.setMosaicResource(mosaicResMap);
+            }
+            mMosaicView.setMosaicEffect(MosaicUtil.Effect.BLUR);
             changeToolsSelector(v);
         } else if (i == R.id.action_flower) {
-            mMosaicView.setMosaicBackgroundResource(mainBitmap);
-            Bitmap bit = BitmapFactory.decodeResource(this.getResources(),
-                    R.drawable.hi4);
-            bit = FileUtils.ResizeBitmap(bit, mainBitmap.getWidth(), mainBitmap.getHeight());
-            mMosaicView.setMosaicResource(bit);
+
+            if (hasMosaicRes(MosaicUtil.Effect.FLOWER)) {
+                Bitmap bit = BitmapFactory.decodeResource(this.getResources(),
+                        R.drawable.hi4);
+                bit = FileUtils.ResizeBitmap(bit, mainBitmap.getWidth(), mainBitmap.getHeight());
+
+                mosaicResMap.put(MosaicUtil.Effect.FLOWER, bit);
+                mMosaicView.setMosaicResource(mosaicResMap);
+            }
+            mMosaicView.setMosaicEffect(MosaicUtil.Effect.FLOWER);
+            changeToolsSelector(v);
         } else if (i == R.id.paint_revoke) {
-//            mMosaicView.setMosaicType(MosaicUtil.MosaicType.ERASER);
             mMosaicView.undo();
         } else {
         }
+    }
+
+    private boolean hasMosaicRes(MosaicUtil.Effect effect) {
+        if (mosaicResMap.containsKey(effect)) {
+            Bitmap bitmap = mosaicResMap.get(effect);
+            if (bitmap != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void changeToolsSelector(View v) {
@@ -113,28 +137,16 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
      */
     private void initSetting() {
 
-// *         1. 布局中引用view mosaic = (DrawMosaicView) findViewById(R.id.mosaic);
-// *
-// *         2. 设置所要打马赛克的图片
-//                *
-// *         mosaic.setMosaicBackgroundResource(mBitmap);
-// *
-// *         3.设置马赛克资源样式
-//                *
-// *         mosaic.setMosaicResource(bit);
-// *
-// *         4.设置绘画粗细
-//                *
-// *         mosaic.setMosaicBrushWidth(10);
-// *
-// *         5.设置马赛克类型(马赛克，橡皮擦)
-//                *
-// *         mosaic.setMosaicType(MosaicType.ERASER);
         mMosaicView.setMosaicBackgroundResource(activity.mainBitmap);
         Bitmap bit = MosaicUtil.getMosaic(activity.mainBitmap);
+        Bitmap blur = MosaicUtil.getBlur(activity.mainBitmap);
 
-        mMosaicView.setMosaicResource(bit);
-        mMosaicView.setMosaicBrushWidth(10);
+        mosaicResMap = new HashMap<>();
+        mosaicResMap.put(MosaicUtil.Effect.MOSAIC, bit);
+        mosaicResMap.put(MosaicUtil.Effect.BLUR, blur);
+        mMosaicView.setMosaicResource(mosaicResMap);
+
+        mMosaicView.setMosaicBrushWidth(30);
 
         //默认选中基础模式
         changeToolsSelector(action_base);
@@ -145,15 +157,12 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
      * 返回主菜单
      */
     public void backToMain() {
-//        appleEdit(null);
         activity.mainImage.setVisibility(View.VISIBLE);
-//        this.mMosaicView.setVisibility(View.GONE);
         mMosaicView.setIsOperation(false);
     }
 
 
     public void onShow() {
-//        this.mMosaicView.setVisibility(View.VISIBLE);
         mMosaicView.setIsOperation(true);
         initSetting();
     }

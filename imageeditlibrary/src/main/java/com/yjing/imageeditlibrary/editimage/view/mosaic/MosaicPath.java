@@ -32,5 +32,9 @@ public class MosaicPath
 	 * 绘画粗细
 	 */
 	public int paintWidth;
-	
+
+	/**
+	 * 马赛克效果
+	 */
+	public MosaicUtil.Effect effect;
 }

@@ -27,13 +27,8 @@ public class MosaicUtil
 
 	public static enum Effect
 	{
-		MOSAIC, BLUR,
+		MOSAIC, BLUR, FLOWER,
 	};
-
-	public static enum MosaicType
-	{
-		MOSAIC, MosaicType, ERASER
-	}
 
 	/**
 	 * 马赛克效果(Native)
