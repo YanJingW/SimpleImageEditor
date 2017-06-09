@@ -82,7 +82,7 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
                 mMosaicView.setMosaicResource(mosaicResMap);
             }
             mMosaicView.setMosaicEffect(MosaicUtil.Effect.MOSAIC);
-            changeToolsSelector(v);
+            changeToolsSelector(MosaicUtil.Effect.MOSAIC);
         } else if (i == R.id.action_ground_glass) {
 
             if (hasMosaicRes(MosaicUtil.Effect.BLUR)) {
@@ -91,7 +91,7 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
                 mMosaicView.setMosaicResource(mosaicResMap);
             }
             mMosaicView.setMosaicEffect(MosaicUtil.Effect.BLUR);
-            changeToolsSelector(v);
+            changeToolsSelector(MosaicUtil.Effect.BLUR);
         } else if (i == R.id.action_flower) {
 
             if (hasMosaicRes(MosaicUtil.Effect.FLOWER)) {
@@ -103,7 +103,7 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
                 mMosaicView.setMosaicResource(mosaicResMap);
             }
             mMosaicView.setMosaicEffect(MosaicUtil.Effect.FLOWER);
-            changeToolsSelector(v);
+            changeToolsSelector(MosaicUtil.Effect.FLOWER);
         } else if (i == R.id.paint_revoke) {
             mMosaicView.undo();
         } else {
@@ -120,7 +120,19 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
         return false;
     }
 
-    private void changeToolsSelector(View v) {
+    private void changeToolsSelector(MosaicUtil.Effect effect) {
+        View v = null;
+        switch (effect) {
+            case MOSAIC:
+                v = action_base;
+                break;
+            case BLUR:
+                v = action_ground_glass;
+                break;
+            case FLOWER:
+                v = action_flower;
+
+        }
         View toolsButton = ((ViewGroup) v).getChildAt(0);
 
         if (preMosaicButton != null) {
@@ -148,8 +160,9 @@ public class MosaicFragment extends BaseFragment implements View.OnClickListener
 
         mMosaicView.setMosaicBrushWidth(30);
 
+        MosaicUtil.Effect mosaicEffect = mMosaicView.getMosaicEffect();
         //默认选中基础模式
-        changeToolsSelector(action_base);
+        changeToolsSelector(mosaicEffect);
 
     }
 

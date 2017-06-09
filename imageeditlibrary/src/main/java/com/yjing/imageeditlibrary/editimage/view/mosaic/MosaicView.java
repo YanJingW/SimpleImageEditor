@@ -406,4 +406,8 @@ public class MosaicView extends View implements EditFunctionOperationInterface {
         this.mosaicEffect = mosaicEffect;
 //        invalidate();
     }
+
+    public MosaicUtil.Effect getMosaicEffect() {
+        return mosaicEffect;
+    }
 }//end class
