@@ -12,7 +12,7 @@
 * 对操作进行撤销
 
 
-![主界面](https://github.com/YanJingW/SimpleImageEditor/blob/master/assets/eidt_image.png)
+![主界面](https://github.com/YanJingW/SimpleImageEditor/blob/master/assets/edit_image.png)
 
 ![涂鸦界面](https://github.com/YanJingW/SimpleImageEditor/blob/master/assets/paint.png)
 
@@ -29,6 +29,7 @@
 ### 版本更新
 
 * 1.0.0  涂鸦，贴图，添加文字，马赛克，截图功能，对操作进行撤销
+* 1.0.1	 马赛克功能可以自由在不同的样式之间切换
 
 ### APK Demo
 
