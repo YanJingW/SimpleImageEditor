@@ -1,10 +1,6 @@
 package com.yjing.imageeditlibrary.editimage.fragment;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,22 +8,23 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.yjing.imageeditlibrary.BaseActivity;
 import com.yjing.imageeditlibrary.R;
 import com.yjing.imageeditlibrary.editimage.EditImageActivity;
+import com.yjing.imageeditlibrary.editimage.StrickerAdapter;
 import com.yjing.imageeditlibrary.editimage.inter.ImageEditInte;
 import com.yjing.imageeditlibrary.editimage.inter.SaveCompletedInte;
 import com.yjing.imageeditlibrary.editimage.model.StickerBean;
 import com.yjing.imageeditlibrary.editimage.task.StickerTask;
-import com.yjing.imageeditlibrary.utils.FileUtils;
 import com.yjing.imageeditlibrary.editimage.view.StickerItem;
 import com.yjing.imageeditlibrary.editimage.view.StickerView;
+import com.yjing.imageeditlibrary.utils.FileUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,21 +62,21 @@ public class StirckerFragment extends BaseFragment implements ImageEditInte {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(SELECT_IMAGE_COMPLETED_RECEIVER_ACTION);
-        activity.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String path = intent.getStringExtra("PATH");
-                Log.i("wangyanjing", "收到广播啦。SELECT_IMAGE_COMPLETED_RECEIVER_ACTION" + path);
-                if (path == null || path.trim().isEmpty()) {
-                    activity.backToMain();
-                    return;
-                }
-                //添加图片到
-                selectedStickerItem(path);
-            }
-        }, filter);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(SELECT_IMAGE_COMPLETED_RECEIVER_ACTION);
+//        activity.registerReceiver(new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                String path = intent.getStringExtra("PATH");
+//                Log.i("wangyanjing", "收到广播啦。SELECT_IMAGE_COMPLETED_RECEIVER_ACTION" + path);
+//                if (path == null || path.trim().isEmpty()) {
+//                    activity.backToMain();
+//                    return;
+//                }
+//                //添加图片到
+//                selectedStickerItem(path);
+//            }
+//        }, filter);
 //        receiverMap.put(receiver, Constant.YES_INT);
     }
 
@@ -87,8 +84,19 @@ public class StirckerFragment extends BaseFragment implements ImageEditInte {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_edit_image_sticker_type, null);
-//        EmojiView ll_emoji = mainView.findViewById(R.id.ll_emoji);
-//        ll_emoji.setType
+        GridView gv_stirck = (GridView) mainView.findViewById(R.id.gv_stirck);
+
+        gv_stirck.setNumColumns(4);
+        StrickerAdapter strickerAdapter = new StrickerAdapter(this);
+        gv_stirck.setAdapter(strickerAdapter);
+
+        View back = mainView.findViewById(R.id.back_btn);
+        back.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainView.setVisibility(View.GONE);
+            }
+        });
         return mainView;
     }
 
@@ -117,12 +125,13 @@ public class StirckerFragment extends BaseFragment implements ImageEditInte {
     @Override
     public void onShow() {
 //        mStickerView.setVisibility(View.VISIBLE);
+        mainView.setVisibility(View.VISIBLE);
         mStickerView.setIsOperation(true);
         //发送广播启动选图acticity
 
-        Intent intent = new Intent();
-        intent.setAction(StirckerFragment.SELECT_IMAGE_RECEIVER_ACTION);
-        activity.sendBroadcast(intent);
+//        Intent intent = new Intent();
+//        intent.setAction(StirckerFragment.SELECT_IMAGE_RECEIVER_ACTION);
+//        activity.sendBroadcast(intent);
     }
 
     @Override
@@ -216,7 +225,9 @@ public class StirckerFragment extends BaseFragment implements ImageEditInte {
      * @param path
      */
     public void selectedStickerItem(String path) {
-        Bitmap image = FileUtils.getBitmapForPath(path);
+        Bitmap image = FileUtils.getImageFromAssetsFile(this.getContext(), path);
+//        Bitmap image = FileUtils.getBitmapForPath(path);
+
         mStickerView.addBitImage(image);
     }
 
@@ -243,6 +254,7 @@ public class StirckerFragment extends BaseFragment implements ImageEditInte {
     public void backToMain() {
 //        appleEdit(null);
 //        mStickerView.setVisibility(View.GONE);
+        activity.mainImage.setVisibility(View.VISIBLE);
         mStickerView.setIsOperation(false);
 
     }

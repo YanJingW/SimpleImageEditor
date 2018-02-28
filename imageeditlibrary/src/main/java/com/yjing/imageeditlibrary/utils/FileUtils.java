@@ -18,6 +18,7 @@ package com.yjing.imageeditlibrary.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -242,5 +244,25 @@ public class FileUtils {
     public static Bitmap getBitmapForPath(String path) {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         return bitmap;
+    }
+
+
+    /**
+     * 从Assets中读取图片
+     * @param fileName Asset中的图片路径
+     * @return
+     */
+    public static Bitmap getImageFromAssetsFile(Context context, String fileName) {
+        Bitmap image = null;
+        AssetManager am = context.getResources().getAssets();
+        try {
+            InputStream is = am.open(fileName);
+            image = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+
     }
 }

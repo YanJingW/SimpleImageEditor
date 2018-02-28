@@ -1,5 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="0dp">
-</RelativeLayout>
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <GridView
+        android:id="@+id/gv_stirck"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"></GridView>
+
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:src="@drawable/edit_image_emotion_board_roll" />
+
+</LinearLayout>
